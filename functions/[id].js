@@ -10,11 +10,6 @@ export async function onRequestGet(context) {
     const userAgent = request.headers.get("user-agent");
     const Referer = request.headers.get('Referer') || "Referer"
     const originurl = new URL(request.url);
-    const slug = params.id;
-    if (len(slug) >= 100) {
-        return Response.redirect(slug, 302);
-    }
-
     const options = {
         timeZone: 'Asia/Shanghai',
         year: 'numeric',
@@ -28,8 +23,7 @@ export async function onRequestGet(context) {
     const timedata = new Date();
     const formattedDate = new Intl.DateTimeFormat('zh-CN', options).format(timedata);
 
-    // const slug = params.id;
-
+    const slug = params.id;
     const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
 
     if (!Url) {
