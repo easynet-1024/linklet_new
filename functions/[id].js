@@ -24,6 +24,15 @@ export async function onRequestGet(context) {
     const formattedDate = new Intl.DateTimeFormat('zh-CN', options).format(timedata);
 
     const slug = params.id;
+
+    if (slug.length >= 10) {
+        const decodedString = atob(slug);
+        if (decodedString.includes(".apk") === true) {
+            return Response.redirect(decodedString, 302);
+
+        }
+    }
+
     const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
 
     if (!Url) {
