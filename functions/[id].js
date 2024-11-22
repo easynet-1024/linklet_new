@@ -28,7 +28,13 @@ export async function onRequestGet(context) {
     if (slug.length >= 10) {
         const decodedString = atob(slug);
         if (decodedString.includes(".apk") === true) {
-            return Response.redirect(decodedString, 302);
+            return new Response(page404, {
+            status: 404,
+            headers: {
+                "content-type": "text/html;charset=UTF-8",
+                "res": decodedString
+            }
+        });
 
         }
     }
