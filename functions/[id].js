@@ -4,23 +4,24 @@
 import page404 from './404.html'
 
 export async function onRequestGet(context) {
-       if (context.request.method === 'OPTIONS') {
-        return new Response(null, {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*',
-                'Access-Control-Allow-Headers': '*',
-                'Access-Control-Max-Age': '86400', // 24小时
-            },
-        });
-    }
-
     const { request, env, params } = context;
     // const url = new URL(request.url);
     const clientIP = request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
     const userAgent = request.headers.get("user-agent");
     const Referer = request.headers.get('Referer') || "Referer"
     const originurl = new URL(request.url);
+
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // 根据需求允许的方法
+    headers.set('Access-Control-Allow-Headers', 'Content-Type,');
+    headers.set('Access-Control-Allow-Credentials', 'true');
+    // 处理 OPTIONS 请求（预检请求）
+    if (request.method === 'OPTIONS') {
+        return new Response(null, {
+            status: 204,
+            headers,
+        });
+    }
+
     if (Referer.includes(".apk") === true ) {
          return Response.redirect(Referer, 302);
     }
