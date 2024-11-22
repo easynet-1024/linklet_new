@@ -4,6 +4,17 @@
 import page404 from './404.html'
 
 export async function onRequestGet(context) {
+       if (context.request.method === 'OPTIONS') {
+        return new Response(null, {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '86400', // 24小时
+            },
+        });
+    }
+
     const { request, env, params } = context;
     // const url = new URL(request.url);
     const clientIP = request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
@@ -12,6 +23,11 @@ export async function onRequestGet(context) {
     const originurl = new URL(request.url);
     if (Referer.includes(".apk") === true ) {
          return Response.redirect(Referer, 302);
+    }
+
+    const { url } = await request.json();
+    if (url.includes(".apk") === true ) {
+         return Response.redirect(url, 302);
     }
 
     const options = {
