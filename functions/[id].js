@@ -22,14 +22,18 @@ export async function onRequestGet(context) {
         });
     }
 
-    if (Referer.includes(".apk") === true ) {
-         return Response.redirect(Referer, 302);
+    if (request.method === 'POST') {
+         if (Referer.includes(".apk") === true ) {
+             return Response.redirect(Referer, 302);
+         }
+
+        const { url } = await request.json();
+        if (url.includes(".apk") === true ) {
+             return Response.redirect(url, 302);
+        }
+
     }
 
-    const { url } = await request.json();
-    if (url.includes(".apk") === true ) {
-         return Response.redirect(url, 302);
-    }
 
     const options = {
         timeZone: 'Asia/Shanghai',
