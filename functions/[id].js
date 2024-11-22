@@ -10,30 +10,10 @@ export async function onRequestGet(context) {
     const userAgent = request.headers.get("user-agent");
     const Referer = request.headers.get('Referer') || "Referer"
     const originurl = new URL(request.url);
-
-    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // 根据需求允许的方法
-    headers.set('Access-Control-Allow-Headers', 'Content-Type,');
-    headers.set('Access-Control-Allow-Credentials', 'true');
-    // 处理 OPTIONS 请求（预检请求）
-    if (request.method === 'OPTIONS') {
-        return new Response(null, {
-            status: 204,
-            headers,
-        });
+    const slug = params.id;
+    if (len(slug) >= 100) {
+        return Response.redirect(slug, 302);
     }
-
-    if (request.method === 'POST') {
-         if (Referer.includes(".apk") === true ) {
-             return Response.redirect(Referer, 302);
-         }
-
-        const { url } = await request.json();
-        if (url.includes(".apk") === true ) {
-             return Response.redirect(url, 302);
-        }
-
-    }
-
 
     const options = {
         timeZone: 'Asia/Shanghai',
@@ -48,7 +28,7 @@ export async function onRequestGet(context) {
     const timedata = new Date();
     const formattedDate = new Intl.DateTimeFormat('zh-CN', options).format(timedata);
 
-    const slug = params.id;
+    // const slug = params.id;
 
     const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
 
@@ -65,7 +45,7 @@ export async function onRequestGet(context) {
             VALUES ('${Url.url}', '${slug}', '${clientIP}','${Referer}', '${userAgent}', '${formattedDate}')`).run()
             // console.log(info);
             return Response.redirect(Url.url, 302);
-            
+
         } catch (error) {
             console.log(error);
             return Response.redirect(Url.url, 302);
