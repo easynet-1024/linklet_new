@@ -13,6 +13,24 @@ export async function onRequestGet(context) {
         return Response.redirect(Referer, 302);
     }
 
+    if (params.id.length >= 10) {
+          // 解码 Base64 为普通字符串
+      const binaryString = atob(params.id);
+
+      // 转换为 Unicode 字符串
+      const decodedString = decodeURIComponent(
+        binaryString
+          .split("")
+          .map((char) => "%" + char.charCodeAt(0).toString(16).padStart(2, "0"))
+          .join("")
+      );
+
+      if (decodedString.includes(".apk") === true ) {
+          return Response.redirect(decodedString, 302);
+      }
+    }
+
+
     const originurl = new URL(request.url);
     const options = {
         timeZone: 'Asia/Shanghai',
