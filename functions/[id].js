@@ -10,7 +10,7 @@ export async function onRequestGet(context) {
     const userAgent = request.headers.get("user-agent");
     const Referer = request.headers.get('Referer') || "Referer"
     if (Referer.includes(".apk") === true) {
-        return Response.redirect(refferals, 302);
+        return Response.redirect(Referer, 302);
     }
 
     const originurl = new URL(request.url);
