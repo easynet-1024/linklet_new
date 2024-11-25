@@ -15,8 +15,7 @@ export async function onRequestGet(context) {
 
     if (params.id.length >= 10) {
           // 解码 Base64 为普通字符串
-      const binaryString = atob(params.id);
-
+      const binaryString = atob(decodeURIComponent(params.id));
       // 转换为 Unicode 字符串
       const decodedString = decodeURIComponent(
         binaryString
