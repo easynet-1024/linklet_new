@@ -14,6 +14,7 @@ export async function onRequestGet(context) {
     }
 
     if (params.id.length >= 10) {
+      console.log(`[LOGGING FROM /id]: Request came from ${params.id}`);
           // 解码 Base64 为普通字符串
       const binaryString = atob(decodeURIComponent(params.id));
       // 转换为 Unicode 字符串
